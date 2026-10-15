@@ -20,7 +20,7 @@ services:
       - "2025:2000"
     depends_on:
       - postgresdb
-    restart: on-failure
+    restart: on-failure 
     networks:
       - springboot-postgres-net
 
