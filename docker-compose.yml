@@ -1,3 +1,4 @@
+```yaml
 services:
   postgresdb:
     image: postgres:16-alpine
@@ -12,15 +13,26 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - springboot-postgres-net
+    restart: unless-stopped
 
   backend:
     image: harshithadaggumati/docker-git-actions-backend:latest
     container_name: docker-springboot
     ports:
       - "2025:2000"
+    environment:
+      SPRING_APPLICATION_NAME: SpringBootProject
+      SERVER_PORT: 2000
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresdb:5432/klustudentdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: docker
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
     depends_on:
       - postgresdb
-    restart: on-failure 
+    restart: on-failure
     networks:
       - springboot-postgres-net
 
